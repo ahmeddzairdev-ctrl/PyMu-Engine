@@ -1,24 +1,25 @@
-def render(self, surface):
-    # Check if the sprite exists before trying to render
-    if self.sprite:
-        # Calculate sprite position considering offsets
-        offset_x = self.sprite_offset_x
-        offset_y = self.sprite_offset_y
-        sprite_position = (self.x + offset_x, self.y + offset_y)
+def render(self):
+    # Check if sprite exists, if not fallback to placeholder
+    if self.sprite is None:
+        self.render_placeholder()
+        return
 
-        # Adjust for facing direction
-        if self.facing_direction == 'right':
-            sprite = self.sprite
-        elif self.facing_direction == 'left':
-            sprite = self.sprite_flipped
-        else:
-            sprite = self.sprite  # Default to original if facing direction is unknown
+    # Calculate offsets based on facing direction
+    offset_x = 0
+    offset_y = 0
+    if self.facing_direction == 'left':
+        offset_x = -self.sprite.width // 2
+    elif self.facing_direction == 'right':
+        offset_x = self.sprite.width // 2
+    elif self.facing_direction == 'up':
+        offset_y = -self.sprite.height // 2
+    elif self.facing_direction == 'down':
+        offset_y = self.sprite.height // 2
 
-        # Render the sprite at the calculated position
-        surface.blit(sprite, sprite_position)
-    else:
-        # Fallback placeholder rendering
-        placeholder_image = self.get_placeholder_image()
-        surface.blit(placeholder_image, (self.x, self.y))
+    # Render the sprite with calculated offsets
+    draw_image(self.sprite, self.position.x + offset_x, self.position.y + offset_y)
 
-    # Additional rendering logic can be added here if needed
+# Placeholder rendering method
+def render_placeholder(self):
+    # Implement placeholder rendering logic here
+    draw_image(self.placeholder_sprite, self.position.x, self.position.y)
