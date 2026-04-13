@@ -75,18 +75,17 @@ class AI:
         """
         self._cooldown -= 1
 
-        dist_x = enemy_char.position[0] - self_char.position[0]
-        dist_x *= self_char.facing   # Positive = enemy is in front
-
-        on_ground = self_char.position[1] >= 0
+        # Raw world-space difference: positive means enemy is to the right
+        raw_dist_x = enemy_char.position[0] - self_char.position[0]
+        on_ground  = self_char.position[1] >= 0
 
         # Choose a new action when cooldown expires
         if self._cooldown <= 0:
-            self._action = self._choose_action(dist_x, self_char, enemy_char)
+            self._action = self._choose_action(raw_dist_x, self_char, enemy_char)
             self._cooldown = self._reaction_delay + random.randint(0, 8)
             self._action_timer = 0
 
-        buttons = self._execute_action(self._action, dist_x, on_ground)
+        buttons = self._execute_action(self._action, raw_dist_x, on_ground)
 
         # Compute pressed / released vs previous frame
         prev_btns = self.ai_input.current.buttons
@@ -135,9 +134,10 @@ class AI:
                 return "jump"
             return "walk_in"
 
-    def _execute_action(self, action: str, dist_x: float, on_ground: bool) -> Button:
-        forward  = Button.RIGHT if dist_x > 0 else Button.LEFT
-        backward = Button.LEFT  if dist_x > 0 else Button.RIGHT
+    def _execute_action(self, action: str, raw_dist_x: float, on_ground: bool) -> Button:
+        # raw_dist_x > 0 means enemy is to our right → press RIGHT to approach
+        forward  = Button.RIGHT if raw_dist_x > 0 else Button.LEFT
+        backward = Button.LEFT  if raw_dist_x > 0 else Button.RIGHT
 
         if action == "idle":
             return Button.NONE

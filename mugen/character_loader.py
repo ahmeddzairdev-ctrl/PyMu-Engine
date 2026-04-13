@@ -304,6 +304,34 @@ class CharacterLoader:
         self._st_files: List[str] = []
         
         self._load()
+
+    def _find_file(self, filename: str) -> Optional[Path]:
+        """
+        Case-insensitive file search: look in char dir first, then data/ dir.
+        Returns the Path if found, None otherwise.
+        """
+        if not filename:
+            return None
+        # Try exact path relative to char folder
+        p = self.path / filename
+        if p.exists():
+            return p
+        # Case-insensitive scan of char folder
+        name_lower = Path(filename).name.lower()
+        for f in self.path.iterdir():
+            if f.name.lower() == name_lower:
+                return f
+        # Try relative to data/ directory (for stcommon etc.)
+        data_path = self.path.parent.parent / filename
+        if data_path.exists():
+            return data_path
+        # Case-insensitive scan of same directory
+        parent = data_path.parent
+        if parent.exists():
+            for f in parent.iterdir():
+                if f.name.lower() == name_lower:
+                    return f
+        return None
     
     def _load(self) -> None:
         """Load all character data."""
@@ -321,34 +349,46 @@ class CharacterLoader:
         
         # Get file references
         self._sprite_file = def_parser.get('files', 'sprite', f'{self.path.name}.sff')
-        self._anim_file = def_parser.get('files', 'anim', f'{self.path.name}.air')
-        self._sound_file = def_parser.get('files', 'sound', '')
-        self._cmd_file = def_parser.get('files', 'cmd', f'{self.path.name}.cmd')
+        self._anim_file   = def_parser.get('files', 'anim',   f'{self.path.name}.air')
+        self._sound_file  = def_parser.get('files', 'sound',  '')
+        self._cmd_file    = def_parser.get('files', 'cmd',    f'{self.path.name}.cmd')
         
-        # CNS files (can be multiple with stcommon)
+        # CNS files — always prepend global common1.cns so state 0 exists
         cns_file = def_parser.get('files', 'cns', f'{self.path.name}.cns')
-        self._cns_files = [cns_file]
-        
         stcommon = def_parser.get('files', 'stcommon', '')
+
+        # Try to resolve stcommon path (may be relative to char dir or data/)
+        self._cns_files = []
         if stcommon:
-            self._cns_files.append(stcommon)
-        
+            self._cns_files.append(stcommon)   # load stcommon first (base states)
+        self._cns_files.append(cns_file)        # then char-specific states
+
         # Additional state files (st0, st1, st2, etc.)
         for i in range(12):
             st_file = def_parser.get('files', f'st{i}', '')
             if st_file:
                 self._st_files.append(st_file)
-        
-        # Load sprites
-        sprite_path = self.path / self._sprite_file
-        if sprite_path.exists():
-            self.sprites = SpriteLoader.load(str(sprite_path))
+
+        # Load sprites — case-insensitive search for macOS/Linux
+        sprite_path = self._find_file(self._sprite_file)
+        if sprite_path:
+            try:
+                self.sprites = SpriteLoader.load(str(sprite_path))
+                sprite_count = len(self.sprites.sprites) if hasattr(self.sprites, 'sprites') else '?'
+                print(f"  [SFF] {self.name}: loaded {sprite_count} sprites from {sprite_path.name}")
+            except Exception as e:
+                print(f"  [SFF] {self.name}: FAILED to load {sprite_path.name}: {e}")
+        else:
+            print(f"  [SFF] {self.name}: sprite file not found: {self._sprite_file}")
         
         # Load sounds
         if self._sound_file:
-            sound_path = self.path / self._sound_file
-            if sound_path.exists():
-                self.sounds = SoundLoader.load(str(sound_path))
+            sound_path = self._find_file(self._sound_file)
+            if sound_path:
+                try:
+                    self.sounds = SoundLoader.load(str(sound_path))
+                except Exception:
+                    pass
         
         # Load animations
         self._load_animations()
@@ -361,8 +401,8 @@ class CharacterLoader:
     
     def _load_animations(self) -> None:
         """Load animations from .air file."""
-        anim_path = self.path / self._anim_file
-        if not anim_path.exists():
+        anim_path = self._find_file(self._anim_file)
+        if not anim_path:
             return
         
         with open(anim_path, 'r', encoding='latin-1') as f:
@@ -471,8 +511,8 @@ class CharacterLoader:
     
     def _load_commands(self) -> None:
         """Load commands from .cmd file."""
-        cmd_path = self.path / self._cmd_file
-        if not cmd_path.exists():
+        cmd_path = self._find_file(self._cmd_file)
+        if not cmd_path:
             return
         
         with open(cmd_path, 'r', encoding='latin-1') as f:

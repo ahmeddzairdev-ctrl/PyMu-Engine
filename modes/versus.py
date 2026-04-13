@@ -81,11 +81,5 @@ class VersusMode(StateHandler):
 
     @staticmethod
     def _make_dummy_stage():
-        from unittest.mock import MagicMock
-        stage = MagicMock()
-        stage.bound_left  = -200
-        stage.bound_right = 200
-        stage.start_x     = 70
-        stage.render      = lambda *a: None
-        stage.render_foreground = lambda *a: None
-        return stage
+        from game.dummy_stage import DummyStage
+        return DummyStage()

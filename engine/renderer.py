@@ -20,6 +20,8 @@ class Renderer:
 
         self._debug = CONFIG.video.show_fps
         self._font: Optional[pygame.font.Font] = None
+        # Ground Y in game_surface coordinates. Updated by Fight via set_ground_y().
+        self._ground_y: int = CONFIG.video.game_height - 60  # safe default
 
     # ------------------------------------------------------------------
     # Core drawing helpers
@@ -106,15 +108,19 @@ class Renderer:
         Convert MUGEN world coordinates to game-surface pixel coordinates.
 
         MUGEN world:  x=0 is the horizontal center of the stage,
-                      y=0 is ground level, y increases downward.
+                      y=0 is ground level, y positive = downward (falling).
         Screen:       (0,0) is top-left of game_surface.
+
+        ground_y: screen Y of the ground plane. Updated by Fight via set_ground_y().
         """
         cx = CONFIG.video.game_width // 2
-        cy = CONFIG.video.game_height - 60  # approximate ground line
-
         sx = int(cx + world_x - camera_x)
-        sy = int(cy + world_y - camera_y)
+        sy = int(self._ground_y + world_y - camera_y)
         return sx, sy
+
+    def set_ground_y(self, y: int) -> None:
+        """Set the screen Y of the ground plane (from stage zoffset)."""
+        self._ground_y = y
 
     # ------------------------------------------------------------------
     # Debug overlays

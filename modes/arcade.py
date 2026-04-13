@@ -105,13 +105,12 @@ class ArcadeMode(StateHandler):
     def _on_match_end(self) -> None:
         from game.fight import RoundResult
         if self._fight.round.result in (
-            __import__("game.fight", fromlist=["RoundResult"]).RoundResult.P1_WIN,
-            __import__("game.fight", fromlist=["RoundResult"]).RoundResult.TIME_OVER_P1,
+            RoundResult.P1_WIN,
+            RoundResult.TIME_OVER_P1,
         ):
             self._current_index += 1
             self._start_next_fight()
         else:
-            # P1 lost — game over
             print("ArcadeMode: P1 lost — returning to menu")
             self.engine.change_state(GameState.MAIN_MENU)
 
@@ -141,12 +140,5 @@ class ArcadeMode(StateHandler):
 
     @staticmethod
     def _make_dummy_stage():
-        """Return a minimal Stage with no graphics (for testing)."""
-        from unittest.mock import MagicMock
-        stage = MagicMock()
-        stage.bound_left  = -200
-        stage.bound_right = 200
-        stage.start_x     = 70
-        stage.render      = lambda *a: None
-        stage.render_foreground = lambda *a: None
-        return stage
+        from game.dummy_stage import DummyStage
+        return DummyStage()

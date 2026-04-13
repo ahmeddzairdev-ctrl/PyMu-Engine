@@ -124,11 +124,5 @@ class TrainingMode(StateHandler):
 
     @staticmethod
     def _make_dummy_stage():
-        from unittest.mock import MagicMock
-        s = MagicMock()
-        s.bound_left  = -200
-        s.bound_right = 200
-        s.start_x     = 70
-        s.render      = lambda *a: None
-        s.render_foreground = lambda *a: None
-        return s
+        from game.dummy_stage import DummyStage
+        return DummyStage()
