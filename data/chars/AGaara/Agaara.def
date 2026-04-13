@@ -1,0 +1,22 @@
+[Info]
+name="Gaara"
+displayname="Sabaku No Gaara"
+versiondate=07-08-07
+mugenversion=06,14,2003
+author="Anjel"
+pal.defaults=
+[Files]
+sprite=gaara.sff
+sound=Gaara.snd
+anim=gaara.air
+cmd=gaara.cmd
+cns=gaara.cns
+st=gaara.cns
+stcommon=common.cns
+pal1=Gaara.act
+st1=Basics.cns
+st2=Specials.cns
+st3=sand.cns
+[Arcade]
+intro.storyboard=
+ending.storyboard=

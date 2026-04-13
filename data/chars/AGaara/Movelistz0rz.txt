@@ -1,0 +1,70 @@
+;==|Sabaku No Gaara|============================================================================================================================================
+
+;===============================================================================================================================================================
+Info:
+
+Name: Sabaku No Gaara
+Author: Anjel
+Created: Seventh August 2007
+
+;===============================================================================================================================================================
+Special Stuffs about him:
+He doesnet have guard, but if opponent is near and is attacking a Sand Barrier appears infront of him.
+Gaara is slow, so he falls Faster in air.
+
+;===============================================================================================================================================================
+Movelist:
+S = Stand
+C = Crouch
+A = Air
+R = Run
+
+
+Basics:
+
+S A: Light Punch.
+S B: Strong Punch ;Its Not really a Punch, He just throws some sand from his Jar, this make opponent fall when hit.
+S X: Medium Punch.
+S Y: Sand Uppercut. ;Sand appears infront of Gaara, it has the force of a uppercut, altso make you fall.
+
+C A: Light Punch.
+C X: Light Punch.
+C B: Sand appears Under Opponent.
+C Y: Sand appears Behind Opponent.
+C A+B: Big Sand Uppercut. ;Alot of sand appears around Gaara, and attacks upward, makes you fall.
+C X+Y: Teleport.
+
+A A: Sand throw. ;Gaara throws some sounds from his jar again.
+A X: Sand throw. ;Gaara throws some sounds from his jar again.
+A B: Sand throw. ;Gaara throws some sounds from his jar again.
+A Y: Sand throw. ;Gaara throws some sounds from his jar again.
+
+R A: Sand and dust comes infront of Gaara and sends opponent away.
+R B: Sand and dust comes infront of Gaara and sends opponent away.
+R X: Sand and dust comes infront of Gaara and sends opponent away.
+R Y: Sand and dust comes infront of Gaara and sends opponent away.
+
+Specials/Hypers:
+Down Back A: Sand Bunshins, Cost's 1000 power, the bunshins Have 70 life each, you can only have Two of them.
+Down Back Down Forward A: Sabakku Kyuu ;On English "Deseart Graveyard", sand appear around opponent and makes him/she raise in air Then the sand implode.
+Down Back Down Forward B: Sabakku Taisou ;Tons of sand appear opponent, and falls on him/she, then Gaara pumpes in Chakra (dunno aboyt that) and make sand explode.
+
+;===============================================================================================================================================================
+Things to add:
+Button style Change, I am to lazy to do it now.
+;===============================================================================================================================================================
+Credit:
+Winane for ripping The Super BG.
+Pakis Pride for ripping The Gaara sprites.
+Neimad For ripping some sand effekts (from Snd4).
+KyubiEyeS For Recoloring some Sand Sprites (from Snd2).
+Mugen China for the "auto defence" idea, And altso Uchiacody (probably spelled it wrong :P) for useing theyr idea on a "small" char.
+Elecbyte For Mugen Engine.
+Cyanide for being best coder ever, and I learned "coding" from his tutorials.
+Me For being teh L337z0rz and relesing another char!
+Tyler for inspiration, he coded a Gaara for "NNP" aka "NASS", i wanted to make one to :P.
+People At MFG forum writing long read-me's, made me wanna write one to :P.
+You! For downloading this char and give feedback, Or else!
+Cyanide Again for Helping me (really much) with the button Layout.
+Cyanide for the third time helping me with making the Sabakku Kyuu Special better.
+OrochiWeapon2000 For the feedback.

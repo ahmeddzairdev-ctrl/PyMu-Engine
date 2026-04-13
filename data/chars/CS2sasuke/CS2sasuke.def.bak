@@ -1,0 +1,29 @@
+; Player information
+[Info]
+name ="CS2sasuke"
+displayname ="CS2 SASUKE"
+versiondate =07,27,2006
+mugenversion =04,14,2002
+author ="Shadow02143"
+pal.defaults =1,2,3,4,5
+
+; Files for the player
+[Files]
+cmd     =CS2sasuke.cmd
+cns     =CS2sasuke.cns
+st      =CS2sasuke.cns
+st2     =AI.cns
+stcommon =common.cns
+sprite  =CS2sasuke.sff
+anim    =CS2sasuke.air
+sound   =CS2sasuke.snd
+pal1=CS2sasukePal.act
+
+
+;*** delete lines with palettes you are not using ***
+
+; Arcade mode
+[Arcade]
+intro.storyboard =
+ending.storyboard =
+

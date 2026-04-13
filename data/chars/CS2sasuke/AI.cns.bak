@@ -1,0 +1,182 @@
+;---------------------------------------------------------
+;AI code
+[Statedef -3]
+
+[State -3, AI ON]
+type = VarSet
+triggerall = var(50) != 1
+trigger1 = command = "AI1"
+trigger2 = command = "AI2"
+trigger3 = command = "AI3"
+trigger4 = command = "AI4"
+trigger5 = command = "AI5"
+trigger6 = command = "AI6"
+trigger7 = command = "AI7"
+trigger8 = command = "AI8"
+trigger9 = command = "AI9"
+trigger10 = command = "AI10"
+trigger11 = command = "AI11"
+trigger12 = command = "AI12"
+trigger13 = command = "AI13"
+trigger14 = command = "AI14"
+trigger15 = command = "AI15"
+trigger16 = command = "AI16"
+trigger17 = command = "AI17"
+trigger18 = command = "AI18"
+trigger19 = command = "AI19"
+trigger20 = command = "AI20"
+trigger21 = command = "AI21"
+trigger22 = command = "AI22"
+trigger23 = command = "AI23"
+trigger24 = command = "AI24"
+trigger25 = command = "AI25"
+trigger26 = command = "AI26"
+trigger27 = command = "AI27"
+trigger28 = command = "AI28"
+trigger29 = command = "AI29"
+trigger30 = command = "AI30"
+trigger31 = command = "AI31"
+trigger32 = command = "AI32"
+trigger33 = command = "AI33"
+trigger34 = command = "AI34"
+trigger35 = command = "AI35"
+trigger36 = command = "AI36"
+trigger37 = command = "AI37"
+trigger38 = command = "AI38"
+trigger39 = command = "AI39"
+trigger40 = command = "AI40"
+trigger41 = command = "AI41"
+trigger42 = command = "AI42"
+trigger43 = command = "AI43"
+trigger44 = command = "AI44"
+trigger45 = command = "AI45"
+trigger46 = command = "AI46"
+trigger47 = command = "AI47"
+trigger48 = command = "AI48"
+trigger49 = command = "AI49"
+trigger50 = command = "AI50"
+var(50) = 1
+
+
+;light punch
+[State -3]
+type = ChangeState
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = P2bodydist X <= 50
+trigger1 = ctrl = 1
+value = 200
+
+;medium punch
+[State -3]
+type = ChangeState
+triggerall = Stateno = 200
+trigger1 = movehit = 1
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = P2bodydist X <= 50
+value = 220
+
+;heavy punch
+[State -3]
+type = ChangeState
+triggerall = Stateno = 220
+trigger1 = random <=10
+trigger1 = movehit = 1
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = P2bodydist X <= 50
+value = 230
+
+;running
+[State -3]
+type = ChangeState
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2MoveType != A
+triggerall = P2Life > 0
+triggerall = P2Dist X > 150
+trigger1 = ctrl = 1
+value = 100
+
+;light kick
+[State -3]
+type = ChangeState
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = P2bodydist X <= 50
+trigger2 = random <= 600
+trigger1 = ctrl = 1
+trigger2 = stateno = 230
+value = 240
+
+;medium kick
+[State -3]
+type = ChangeState
+trigger1 = movehit = 1
+triggerall = stateno = 240
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = P2bodydist X <= 50
+value = 250
+
+;heavy kick
+[State -3]
+type = ChangeState
+triggerall = Stateno = 250
+trigger1 = movehit = 1
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = P2bodydist X <= 50
+value = 260
+
+;goukakyuu no jutsu
+[State -3]
+type = ChangeState
+triggerall = var(50) = 1
+triggerall = StateType = S
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = power >= 1000
+triggerall = P2bodydist X <= 80
+trigger1 = ctrl = 1
+value = 10000
+
+;hosenka no jutsu
+[State -3]
+type = ChangeState
+triggerall = var(50) = 1
+triggerall = StateType = A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = power >= 500
+triggerall = P2bodydist X <= 100
+trigger1 = ctrl = 1
+value = 10020
+
+;chidori
+[State -3]
+type = ChangeState
+triggerall = var(50) = 1
+triggerall = StateType != A
+triggerall = Movetype != H
+triggerall = P2Life > 0
+triggerall = power >= 3000
+triggerall = P2bodydist X <= 400
+trigger1 = ctrl = 1
+value = 7500
+
+

@@ -1,0 +1,373 @@
+; Constants and state file.
+; There are comments scattered through this file, so you may like to
+; take a look if would like to learn more about the cns.
+
+[Data]
+life = 1000			;Amount of life to start with
+power = 4000		;Amount of maximum power
+attack = 100		;attack power (more is stronger)
+defence = 100		;defensive power (more is stronger)
+fall.defence_up = 50	;Percentage to increase defense everytime player is knocked down
+liedown.time = 90		;Time which player lies down for, before getting up
+airjuggle = 15		;Number of points for juggling
+sparkno = 2			;Default hit spark number for HitDefs
+guard.sparkno = 40	;Default guard spark number
+KO.echo = 0			;1 to enable echo on KO
+volume = 0			;Volume offset (negative for softer)
+IntPersistIndex = 60	;Variables with this index and above will not have their values
+FloatPersistIndex = 40  ;reset to 0 between rounds or matches. There are 60 int variables,
+  				;indexed from 0 to 59, and 40 float variables, indexed from 0 to 39.
+  				;If omitted, then it defaults to 60 and 40 for integer and float
+  				;variables repectively, meaning that none are persistent, i.e. all
+  				;are reset. If you want your variables to persist between matches,
+  				;you need to override state 5900 from common1.cns.
+
+
+[Size]
+xscale = 1			;Horizontal scaling factor.
+yscale = 1			;Vertical scaling factor.
+ground.back = 15		;Player width (back, ground)
+ground.front = 16		;Player width (front, ground)
+air.back = 12		;Player width (back, air)
+air.front = 12		;Player width (front, air)
+height = 60			;Height of player (for opponent to jump over)
+attack.dist = 160		;Default attack distance
+proj.attack.dist = 90	;Default attack distance for projectiles
+proj.doscale = 0		;Set to 1 to scale projectiles too   
+head.pos = -5, -90	;Approximate position of head
+mid.pos = -5, -60		;Approximate position of midsection
+shadowoffset = 0		;Number of pixels to vertically offset the shadow
+draw.offset = 0,0		;Player drawing offset in pixels (x, y)
+
+[Velocity]
+walk.fwd  = 2		;Walk forward
+walk.back = -2		;Walk backward
+run.fwd  = 5.6, 0		;Run forward (x, y)
+run.back = -4.5,-3.8	;Hop backward (x, y)
+jump.neu = 0,-8.2		;Neutral jumping velocity (x, y)
+jump.back = -4,-1		;Jump back Speed (x, y)
+jump.fwd = 3		;Jump forward Speed (x, y)
+runjump.back = -2.55,-8.1;Running jump speeds (opt)
+runjump.fwd = 4,-8.1	;.
+airjump.neu = 0,-8.0	;.
+airjump.back = -2.55	;Air jump speeds (opt)
+airjump.fwd = 2.5		;.
+
+[Movement]
+airjump.num = 1		;Number of air jumps allowed (opt)
+airjump.height = 35	;Minimum distance from ground before you can air jump (opt)
+yaccel = .46		;Vertical acceleration
+stand.friction = .85	;Friction coefficient when standing
+crouch.friction = .82	;Friction coefficient when crouching
+
+;---------------------------------------------------------------------------
+; Format:
+; [Statedef STATENO]
+; type = ?      S/C/A/L  stand/crouch/air/liedown
+; movetype = ?  I/A/H    idle/attack/gethit
+; physics = ?   S/C/A/N  stand/crouch/air/none
+; juggle = ?             air juggle points move requires
+;
+; [State STATENO, ?]     ? - any number you choose
+; type = ?
+; ...
+
+;---------------------------------------------------------------------------
+; Lose by Time Over
+; CNS difficulty: basic
+[Statedef 170]
+type = S
+ctrl = 0
+velset = 0,0
+
+[State 0, ChangeState]
+type = ChangeState
+trigger1 = !time
+value = ifelse(random < 500,171,172)
+ctrl = 0
+
+
+[State 170, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+;---------------------------------------------------------------------------
+[Statedef 171]
+type = S
+ctrl = 0
+anim = 170
+velset = 0,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = !time
+value = 15,12
+volume = 800
+
+[State 0, ScreenBound]
+type = ScreenBound
+trigger1 = 1
+value = 0
+movecamera = 0,0
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = 1
+x = const(velocity.walk.back.x)
+
+[State 170, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+;---------------------------------------------------------------------------
+[Statedef 172]
+type = S
+ctrl = 0
+anim = 100
+velset = 0,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = !time
+value = 15,28
+volume = 800
+
+[State 0, ScreenBound]
+type = ScreenBound
+trigger1 = 1
+value = 0
+movecamera = 0,0
+
+[State 0, PlayerPush]
+type = PlayerPush
+trigger1 = 1
+value = 0
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = 1
+x = const(velocity.run.fwd.x)
+
+[State 170, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+;---------------------------------------------------------------------------
+; Win state decider
+; CNS difficulty: basic
+[Statedef 180]
+type = S
+
+[State 180, 1]
+type = ChangeState
+trigger1 = Time = 0
+value = ifelse(random < 500,181,182)
+;---------------------------------------------------------------------------
+; Win pose 1
+; CNS difficulty: basic
+[Statedef 181]
+type = S
+ctrl = 0
+anim = 180
+velset = 0,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = !time
+value = 15,3
+volume = 800
+
+[State 181, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+;---------------------------------------------------------------------------
+; Win pose 1
+; CNS difficulty: basic
+[Statedef 182]
+type = S
+ctrl = 0
+anim = 300
+velset = 0,0
+
+[State 0, ChangeAnim]
+type = ChangeAnim
+trigger1 = time = 50 && anim = 300
+value = 301
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 0
+trigger2 = time = 50
+value = 190,0
+volume = 800
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+trigger2 = time = 50
+anim = 302
+ID = 302
+pos = 0,0
+postype = p1  ;p2,front,back,left,right
+facing = 1
+vfacing = 1
+bindtime = 1
+removetime = -2
+scale = 1,1
+sprpriority = 0
+ontop = 1
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+
+[State 0, Turn]
+type = Turn
+trigger1 = time = 49
+
+[State 0, PosAdd]
+type = PosAdd
+trigger1 = time = 48
+x = p2dist X + 45
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 60
+value = 15,7
+volume = 800
+
+[State 0, ChangeAnim]
+type = ChangeAnim
+trigger1 = animtime = 0 && anim = 301
+value = 180
+
+[State 181, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+;---------------------------------------------------------------------------
+; Introduction
+; CNS difficulty: basic
+[Statedef 190]
+type = S
+ctrl = 0
+anim = 190
+velset = 0,0
+
+[State 190, 1] ;Freeze animation until PreIntro is over
+type = ChangeAnim
+trigger1 = RoundState = 0
+value = 190
+
+[State 190, 2] ;Assert this until you want "round 1, fight" to begin
+type = AssertSpecial
+trigger1 = 1
+flag = Intro
+
+[State 190, 4] ;Change to stand state
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+
+;---------------------------------------------------------------------------
+; Taunt
+; CNS difficulty: easy
+[Statedef 195]
+type = S
+ctrl = 0
+anim = 195
+velset = 0,0
+movetype = I
+physics = S
+sprpriority = 2
+
+[State 195, 2]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;---------------------------------------------------------------------------
+; Override common states (use same number to override) :
+;---------------------------------------------------------------------------
+
+;---------------------------------------------------------------------------
+; States that are always executed (use statedef -2)
+;---------------------------------------------------------------------------
+
+;---------------------------------------------------------------------------
+; States that are executed when in self's state file (use statedef -3)
+;---------------------------------------------------------------------------
+
+[Statedef -3]
+
+;This controller plays a sound everytime the player lands from a jump, or
+;from a back-dash.
+[State -3, Landing Sound]
+type = PlaySnd
+triggerall = Time = 1
+trigger1 = stateno = 52 ;Jump land
+trigger2 = stateno = 106 ;Run-back land
+value = 40, 0
+volume = 800
+
+[State -3, Walk Sound]
+type = PlaySnd
+triggerall = Stateno = 20
+trigger1 = animelem = 2
+trigger2 = animelem = 5
+value = S40,0
+volume = 800
+
+[State -3, Jump Sound]
+type = PlaySnd
+trigger1 = Stateno = 40 && Animtime = 0
+trigger2 = Stateno = 45 && time = 2
+value = S40,1
+volume = 800
+
+[State -3, Run Sound]
+type = PlaySnd
+triggerall = Stateno = 100
+trigger1 = animelem = 1
+trigger2 = animelem = 4
+value = S40,0
+volume = 800
+
+[State -3, Gethit sounds]
+type = PlaySnd
+trigger1 = stateno = 5000 && time = 1
+trigger2 = stateno = 5100 && time = 1
+value = S15, IfElse(random < 500,Ifelse(random < 500,4,8),Ifelse(Random < 500,16,18))
+volume = 800
+
+[State -3, Gaaras Sand]
+type = Helper
+triggerall = movetype != H
+triggerall = p2dist X < 99
+triggerall = stateno != [5020,5900]
+triggerall = Statetype != A
+triggerall = numhelper(850) = 0
+trigger1 = p2movetype = A
+helpertype = normal ;player
+name = "Sand"
+ID = 850
+stateno = 850
+pos = 0,0
+postype = p1    ;p2,front,back,left,right
+facing = 1
+keyctrl = 0
+ownpal = 0
+ontop = 1
+
+[State -2, NotHitBy]
+type = NotHitBy
+Triggerall = Numhelper(850) != 0
+trigger1 = helper(850), Stateno = 850 && time < 30
+trigger2 = helper(850), Stateno = 851 && helper(850), time < 5
+value = SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
+time = 1
